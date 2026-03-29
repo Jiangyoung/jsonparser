@@ -21,6 +21,18 @@
 
 在支持的浏览器（如 Chrome, Edge, Safari）中访问，点击地址栏右侧的“安装”图标，即可像原生应用一样运行。
 
+## 🚀 技术栈与开发
+
+-   **核心架构**：React 19 + TypeScript + Vite 6
+-   **样式引擎**：Tailwind CSS 4 (Apple HIG 风格)
+-   **PWA 支持**：Vite Plugin PWA
+-   **AI 协作开发**：本项目由 **[Gemini CLI](https://github.com/google/gemini-cli)** 自动生成并迭代开发。
+
+## 👥 贡献者 (Contributors)
+
+-   **[Jiangyoung](https://github.com/Jiangyoung)** - 发起者与维护者
+-   **Gemini** - AI 协作开发助手 (Google DeepMind)
+
 ## 🛠️ 本地开发
 
 ```bash
