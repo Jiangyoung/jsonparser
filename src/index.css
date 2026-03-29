@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-apple-bg text-apple-text antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.apple-button {
+  @apply px-4 py-2 rounded-apple font-medium transition-all duration-200;
+  @apply bg-apple-blue text-white hover:bg-opacity-90 active:scale-95;
+}
+
+.apple-button-secondary {
+  @apply px-4 py-2 rounded-apple font-medium transition-all duration-200;
+  @apply bg-white border border-apple-border text-apple-text hover:bg-gray-50 active:scale-95;
+}
+
+.apple-card {
+  @apply bg-apple-card rounded-apple border border-apple-border shadow-apple overflow-hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d2d2d7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #86868b;
+}
