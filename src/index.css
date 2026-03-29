@@ -1,6 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-apple-bg: #f5f5f7;
+  --color-apple-card: #ffffff;
+  --color-apple-text: #1d1d1f;
+  --color-apple-secondary: #86868b;
+  --color-apple-blue: #0071e3;
+  --color-apple-border: #d2d2d7;
+
+  --radius-apple: 12px;
+
+  --shadow-apple: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 
 @layer base {
   body {
@@ -17,12 +28,20 @@
 
 .apple-button {
   @apply px-4 py-2 rounded-apple font-medium transition-all duration-200;
-  @apply bg-apple-blue text-white hover:bg-opacity-90 active:scale-95;
+  @apply bg-apple-blue text-white active:scale-95;
+}
+
+.apple-button:hover {
+  opacity: 0.9;
 }
 
 .apple-button-secondary {
   @apply px-4 py-2 rounded-apple font-medium transition-all duration-200;
-  @apply bg-white border border-apple-border text-apple-text hover:bg-gray-50 active:scale-95;
+  @apply bg-white border border-apple-border text-apple-text active:scale-95;
+}
+
+.apple-button-secondary:hover {
+  @apply bg-gray-50;
 }
 
 .apple-card {
