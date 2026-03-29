@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Copy, Download, Trash2, FileJson, Minimize2, Expand, Check, AlertCircle } from 'lucide-react';
+import { Copy, Download, Trash2, FileJson, Minimize2, Expand, Check, AlertCircle, PlayCircle } from 'lucide-react';
 import JsonTree from './components/JsonTree';
 
 const EXAMPLE_JSON = {
@@ -24,6 +24,7 @@ function App() {
 
   const parsedData = useMemo(() => {
     try {
+      if (!input.trim()) return null;
       const data = JSON.parse(input);
       setError(null);
       return data;
@@ -84,7 +85,6 @@ function App() {
           <h1 className="text-xl font-semibold tracking-tight">JSON Parser</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={handleExample} className="apple-button-secondary text-sm">Example</button>
           <button onClick={handleCopy} className="apple-button-secondary text-sm flex items-center gap-2">
             {copied ? <Check size={14} /> : <Copy size={14} />}
             {copied ? 'Copied' : 'Copy'}
@@ -102,9 +102,23 @@ function App() {
         <section className="flex-1 flex flex-col border-r border-apple-border">
           <div className="bg-gray-50 px-4 py-2 border-b border-apple-border flex items-center justify-between">
             <span className="text-xs font-medium text-apple-secondary uppercase tracking-wider">Input</span>
-            <div className="flex items-center gap-2">
-               <button onClick={handleClear} className="p-1 hover:bg-gray-200 rounded transition-colors" title="Clear">
-                <Trash2 size={14} className="text-apple-secondary" />
+            <div className="flex items-center gap-3">
+              <button onClick={handleExample} className="flex items-center gap-1 text-[11px] font-medium text-apple-blue hover:opacity-80 transition-opacity">
+                <PlayCircle size={13} />
+                Example
+              </button>
+              <div className="w-px h-3 bg-apple-border mx-1" />
+              <button onClick={handleFormat} className="flex items-center gap-1 text-[11px] font-medium text-apple-blue hover:opacity-80 transition-opacity">
+                <Expand size={13} />
+                Format
+              </button>
+              <button onClick={handleCompress} className="flex items-center gap-1 text-[11px] font-medium text-apple-blue hover:opacity-80 transition-opacity">
+                <Minimize2 size={13} />
+                Compress
+              </button>
+              <div className="w-px h-3 bg-apple-border mx-1" />
+              <button onClick={handleClear} className="p-1 hover:bg-gray-200 rounded transition-colors text-apple-secondary" title="Clear">
+                <Trash2 size={13} />
               </button>
             </div>
           </div>
@@ -119,18 +133,8 @@ function App() {
 
         {/* Output area */}
         <section className="flex-1 flex flex-col bg-[#fafafa]">
-          <div className="bg-gray-50 px-4 py-2 border-b border-apple-border flex items-center justify-between">
+          <div className="bg-gray-50 px-4 py-2 border-b border-apple-border">
             <span className="text-xs font-medium text-apple-secondary uppercase tracking-wider">Tree View</span>
-            <div className="flex items-center gap-4">
-              <button onClick={handleCompress} className="flex items-center gap-1.5 text-xs font-medium text-apple-blue hover:underline">
-                <Minimize2 size={12} />
-                Compress
-              </button>
-              <button onClick={handleFormat} className="flex items-center gap-1.5 text-xs font-medium text-apple-blue hover:underline">
-                <Expand size={12} />
-                Format
-              </button>
-            </div>
           </div>
           <div className="flex-1 p-4 overflow-auto">
             {error ? (
