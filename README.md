@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# 🍎 Apple Style JSON Parser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个简洁、优雅且强大的 JSON 解析与格式化工具，采用 **Apple Human Interface Guidelines (HIG)** 设计风格。
 
-Currently, two official plugins are available:
+👉 **[在线访问 (Live Demo)](https://jiangyoung.github.io/jsonparser/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ 特性
 
-## React Compiler
+-   **🍏 Apple HIG 设计**：采用系统字体（SF Pro 风格）、圆角矩形、毛玻璃效果和柔和的阴影。
+-   **🌳 树形视图**：支持无限层级的 JSON 树形展示，支持折叠与展开。
+-   **⚡️ 离线优先 (PWA)**：支持安装到桌面或主屏幕，无需网络即可离线使用。
+-   **🛠️ 实用工具**：
+    -   **Example**：快速加载示例数据。
+    -   **Format**：标准 2 空格缩进格式化。
+    -   **Compress**：一键压缩 JSON（Minify）。
+    -   **Copy**：快速复制到剪贴板。
+    -   **Export**：导出为 `data_{timestamp}.json` 文件。
+-   **🚀 高性能**：基于 Vite 6 + React 19 + Tailwind CSS 4 构建。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📥 安装为 PWA
 
-## Expanding the ESLint configuration
+在支持的浏览器（如 Chrome, Edge, Safari）中访问，点击地址栏右侧的“安装”图标，即可像原生应用一样运行。
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ 本地开发
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# 安装依赖
+npm install --legacy-peer-deps
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# 启动开发服务器
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 构建生产版本
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📄 开源协议
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT
