@@ -18,9 +18,9 @@ const JsonTree: React.FC<JsonTreeProps> = ({ data, label, isLast = true, depth =
   const toggle = () => setIsOpen(!isOpen);
 
   const renderValue = (val: any) => {
-    if (typeof val === 'string') return <span className="text-green-600">"{val}"</span>;
-    if (typeof val === 'number') return <span className="text-apple-blue">{val}</span>;
-    if (typeof val === 'boolean') return <span className="text-purple-600">{val.toString()}</span>;
+    if (typeof val === 'string') return <span className="text-blue-600 break-all whitespace-pre-wrap">"{val}"</span>;
+    if (typeof val === 'number') return <span className="text-orange-600 font-medium">{val}</span>;
+    if (typeof val === 'boolean') return <span className="text-purple-600 font-medium">{val.toString()}</span>;
     if (val === null) return <span className="text-gray-400">null</span>;
     return null;
   };
@@ -28,9 +28,9 @@ const JsonTree: React.FC<JsonTreeProps> = ({ data, label, isLast = true, depth =
   if (!isObject) {
     return (
       <div className="flex items-start py-0.5 font-mono text-sm leading-relaxed">
-        {label && <span className="text-apple-text font-semibold mr-2">{label}:</span>}
+        {label && <span className="text-gray-900 font-medium mr-2 shrink-0">{label}:</span>}
         {renderValue(data)}
-        {!isLast && <span className="text-apple-secondary">,</span>}
+        {!isLast && <span className="text-gray-400">,</span>}
       </div>
     );
   }
@@ -40,22 +40,22 @@ const JsonTree: React.FC<JsonTreeProps> = ({ data, label, isLast = true, depth =
 
   return (
     <div className="font-mono text-sm leading-relaxed">
-      <div className="flex items-center cursor-pointer hover:bg-black/5 rounded px-1 -ml-1 py-0.5" onClick={toggle}>
-        <span className="w-4 h-4 flex items-center justify-center mr-1 text-apple-secondary">
+      <div className="flex items-center cursor-pointer hover:bg-black/5 rounded px-1 -ml-1 py-0.5 group" onClick={toggle}>
+        <span className="w-4 h-4 flex items-center justify-center mr-1 text-gray-300 group-hover:text-gray-600">
           {!isEmpty && (isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
         </span>
-        {label && <span className="text-apple-text font-semibold mr-2">{label}:</span>}
-        <span className="text-apple-secondary">{bracketOpen}</span>
+        {label && <span className="text-gray-900 font-medium mr-2">{label}:</span>}
+        <span className="text-gray-400">{bracketOpen}</span>
         {!isOpen && !isEmpty && (
-          <span className="mx-1 px-1 bg-gray-200 rounded text-xs text-gray-500">
+          <span className="mx-1 px-1 bg-gray-100 rounded text-[10px] text-gray-500">
             {isArray ? `${data.length} items` : `${Object.keys(data).length} keys`}
           </span>
         )}
-        {!isOpen && <span className="text-apple-secondary">{bracketClose}{!isLast && ','}</span>}
+        {!isOpen && <span className="text-gray-400">{bracketClose}{!isLast && ','}</span>}
       </div>
 
       {isOpen && !isEmpty && (
-        <div className="ml-6 border-l border-apple-border/50">
+        <div className="ml-5 border-l border-gray-100 pl-2">
           {isArray
             ? data.map((item: any, idx: number) => (
                 <JsonTree key={idx} data={item} isLast={idx === data.length - 1} depth={depth + 1} />
@@ -75,7 +75,7 @@ const JsonTree: React.FC<JsonTreeProps> = ({ data, label, isLast = true, depth =
       {isOpen && (
         <div className="flex items-center">
           <span className="w-4 h-4 mr-1" />
-          <span className="text-apple-secondary">{bracketClose}{!isLast && ','}</span>
+          <span className="text-gray-400">{bracketClose}{!isLast && ','}</span>
         </div>
       )}
     </div>
