@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Apple Style JSON Parser',
-        short_name: 'JSON Parser',
-        description: 'A clean, Apple-inspired JSON parsing and formatting tool.',
+        name: 'Minimalist JSON Analyzer',
+        short_name: 'JSON Analyzer',
+        description: 'A clean, minimalist JSON parsing and analysis tool.',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',

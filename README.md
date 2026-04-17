@@ -1,6 +1,6 @@
-# 🍎 Apple Style JSON Parser
+# 🕊️ Minimalist JSON Analyzer
 
-一个简洁、优雅且强大的 JSON 解析与格式化工具，采用 **简约主义 (Minimalist)** 设计风格。
+一个简洁、优雅且强大的 JSON 解析与分析工具，采用 **简约主义 (Minimalist)** 设计风格。
 
 👉 **[在线访问 (Live Demo)](https://jiangyoung.github.io/jsonparser/)**
 
