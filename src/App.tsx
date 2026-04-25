@@ -1,11 +1,15 @@
-import { useState, useCallback, useMemo } from 'react';
-import { Copy, Download, Trash2, FileJson, Minimize2, Expand, Check, AlertCircle, PlayCircle, ListTree } from 'lucide-react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { Copy, Download, Trash2, FileJson, Minimize2, Expand, Check, AlertCircle, PlayCircle, ListTree, ArrowUp } from 'lucide-react';
 import JsonTree from './components/JsonTree';
 
 const EXAMPLE_JSON = {
   项目名称: "简约风 JSON 解析器",
-  版本: "3.1.0",
-  更新说明: "将格式化与压缩逻辑移至右侧输出区，保持左侧输入内容不变。",
+  版本: "3.2.0",
+  优化项: [
+    "改善了滚动条的可见度",
+    "增加了右侧面板回到顶部按钮",
+    "修复了长内容下的交互体验"
+  ],
   特性: ["自动换行", "树形/文本双视图", "响应式布局", "PWA 离线使用"],
   作者: {
     姓名: "Gemini CLI",
@@ -20,6 +24,9 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('tree');
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  const outputScrollRef = useRef<HTMLDivElement>(null);
 
   const parsedData = useMemo(() => {
     try {
@@ -68,6 +75,19 @@ function App() {
   const handleClear = useCallback(() => {
     setInput("");
   }, []);
+
+  const scrollToTop = () => {
+    outputScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setShowScrollTop(e.currentTarget.scrollTop > 300);
+  };
+
+  // 切换视图时回到顶部
+  useEffect(() => {
+    outputScrollRef.current?.scrollTo({ top: 0 });
+  }, [viewMode]);
 
   return (
     <div className="min-h-screen flex flex-col bg-min-bg text-min-text">
@@ -122,7 +142,7 @@ function App() {
         </section>
 
         {/* 右侧：输出/预览区 */}
-        <section className="flex-1 flex flex-col bg-min-sub">
+        <section className="flex-1 flex flex-col bg-min-sub relative">
           <div className="min-panel-header">
             <div className="flex items-center gap-2">
               <span className="min-tag">Output</span>
@@ -153,7 +173,11 @@ function App() {
             </div>
           </div>
 
-          <div className="flex-1 p-8 overflow-auto">
+          <div 
+            ref={outputScrollRef}
+            onScroll={handleScroll}
+            className="flex-1 p-8 overflow-auto scroll-smooth"
+          >
             {error ? (
               <div className="bg-red-50 border border-red-100 rounded-lg p-6 flex gap-4 text-red-600">
                 <AlertCircle size={20} className="shrink-0" />
@@ -163,7 +187,7 @@ function App() {
                 </div>
               </div>
             ) : parsedData ? (
-              <div className="bg-white rounded-lg border border-min-border p-8 min-h-full shadow-sm">
+              <div className="bg-white rounded-lg border border-min-border p-8 min-h-full shadow-sm relative">
                 {viewMode === 'tree' ? (
                   <JsonTree data={parsedData} />
                 ) : (
@@ -179,6 +203,17 @@ function App() {
               </div>
             )}
           </div>
+
+          {/* 回到顶部按钮 */}
+          {showScrollTop && (
+            <button
+              onClick={scrollToTop}
+              className="absolute bottom-10 right-10 w-10 h-10 bg-white border border-min-border rounded-full shadow-lg flex items-center justify-center text-min-secondary hover:text-min-accent hover:border-min-accent transition-all z-30 animate-fade-in-up"
+              title="回到顶部"
+            >
+              <ArrowUp size={20} />
+            </button>
+          )}
         </section>
       </main>
 

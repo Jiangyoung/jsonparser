@@ -40,10 +40,10 @@
   @apply px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-min-border/50 text-min-secondary;
 }
 
-/* 滚动条 */
+/* 优化后的滚动条 */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -51,10 +51,27 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
+  background: #d1d5db;
   border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
+  background: #9ca3af;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out forwards;
 }
