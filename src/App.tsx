@@ -4,11 +4,11 @@ import JsonTree from './components/JsonTree';
 
 const EXAMPLE_JSON = {
   项目名称: "简约风 JSON 解析器",
-  版本: "3.2.0",
-  优化项: [
-    "改善了滚动条的可见度",
-    "增加了右侧面板回到顶部按钮",
-    "修复了长内容下的交互体验"
+  版本: "3.2.1",
+  修复项: [
+    "修复了回到顶部按钮不显示的问题",
+    "增强了左右双面板的滚动条可见度",
+    "优化了长内容下的容器层级"
   ],
   特性: ["自动换行", "树形/文本双视图", "响应式布局", "PWA 离线使用"],
   作者: {
@@ -24,9 +24,13 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('tree');
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
   
-  const outputScrollRef = useRef<HTMLDivElement>(null);
+  // 滚动状态
+  const [showRightScrollTop, setShowRightScrollTop] = useState(false);
+  const [showLeftScrollTop, setShowLeftScrollTop] = useState(false);
+  
+  const leftScrollRef = useRef<HTMLTextAreaElement>(null);
+  const rightScrollRef = useRef<HTMLDivElement>(null);
 
   const parsedData = useMemo(() => {
     try {
@@ -76,23 +80,19 @@ function App() {
     setInput("");
   }, []);
 
-  const scrollToTop = () => {
-    outputScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setShowScrollTop(e.currentTarget.scrollTop > 300);
+  const scrollToTop = (ref: React.RefObject<HTMLElement | null>) => {
+    ref.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // 切换视图时回到顶部
   useEffect(() => {
-    outputScrollRef.current?.scrollTo({ top: 0 });
+    rightScrollRef.current?.scrollTo({ top: 0 });
   }, [viewMode]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-min-bg text-min-text">
+    <div className="min-h-screen h-screen flex flex-col bg-min-bg text-min-text overflow-hidden">
       {/* 顶部导航 */}
-      <header className="min-header px-8 py-4 flex items-center justify-between">
+      <header className="min-header px-8 py-4 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <FileJson className="text-min-accent" size={24} />
           <h1 className="text-lg font-semibold tracking-tight">JSON Parser</h1>
@@ -113,13 +113,12 @@ function App() {
       </header>
 
       {/* 主体内容 */}
-      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         {/* 左侧：输入区 */}
-        <section className="flex-1 flex flex-col border-r border-min-border">
-          <div className="min-panel-header">
+        <section className="flex-1 flex flex-col border-r border-min-border relative h-full">
+          <div className="min-panel-header shrink-0">
             <div className="flex items-center gap-2">
               <span className="min-tag">Input</span>
-              <span className="text-[10px] text-min-secondary font-mono italic">源数据</span>
             </div>
             <div className="flex items-center gap-4">
               <button onClick={handleExample} className="text-xs font-medium text-min-accent hover:opacity-70 flex items-center gap-1 transition-opacity">
@@ -133,20 +132,30 @@ function App() {
             </div>
           </div>
           <textarea
+            ref={leftScrollRef}
             value={input}
+            onScroll={(e) => setShowLeftScrollTop(e.currentTarget.scrollTop > 300)}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 w-full p-8 font-mono text-sm resize-none focus:outline-none bg-white text-gray-800 leading-relaxed border-none"
+            className="flex-1 w-full p-8 font-mono text-sm resize-none focus:outline-none bg-white text-gray-800 leading-relaxed border-none overflow-auto scroll-smooth"
             placeholder="在此粘贴 JSON 源码..."
             spellCheck={false}
           />
+          {showLeftScrollTop && (
+            <button
+              onClick={() => scrollToTop(leftScrollRef)}
+              className="absolute bottom-6 right-6 w-10 h-10 bg-white border border-min-border rounded-full shadow-lg flex items-center justify-center text-min-secondary hover:text-min-accent hover:border-min-accent transition-all z-20 animate-fade-in-up"
+              title="回到顶部"
+            >
+              <ArrowUp size={20} />
+            </button>
+          )}
         </section>
 
         {/* 右侧：输出/预览区 */}
-        <section className="flex-1 flex flex-col bg-min-sub relative">
-          <div className="min-panel-header">
+        <section className="flex-1 flex flex-col bg-min-sub relative h-full">
+          <div className="min-panel-header shrink-0">
             <div className="flex items-center gap-2">
               <span className="min-tag">Output</span>
-              <span className="text-[10px] text-min-secondary font-mono italic">输出结果</span>
             </div>
             <div className="flex bg-white rounded-md border border-min-border p-0.5 shadow-sm">
               <button 
@@ -174,20 +183,20 @@ function App() {
           </div>
 
           <div 
-            ref={outputScrollRef}
-            onScroll={handleScroll}
-            className="flex-1 p-8 overflow-auto scroll-smooth"
+            ref={rightScrollRef}
+            onScroll={(e) => setShowRightScrollTop(e.currentTarget.scrollTop > 300)}
+            className="flex-1 p-8 overflow-auto scroll-smooth relative"
           >
             {error ? (
               <div className="bg-red-50 border border-red-100 rounded-lg p-6 flex gap-4 text-red-600">
                 <AlertCircle size={20} className="shrink-0" />
                 <div>
-                  <h3 className="font-semibold text-sm underline decoration-2">解析错误 (Syntax Error)</h3>
+                  <h3 className="font-semibold text-sm">解析错误</h3>
                   <p className="text-xs mt-3 leading-relaxed opacity-90 break-all font-mono bg-white/50 p-3 rounded border border-red-200">{error}</p>
                 </div>
               </div>
             ) : parsedData ? (
-              <div className="bg-white rounded-lg border border-min-border p-8 min-h-full shadow-sm relative">
+              <div className="bg-white rounded-lg border border-min-border p-8 min-h-full shadow-sm">
                 {viewMode === 'tree' ? (
                   <JsonTree data={parsedData} />
                 ) : (
@@ -205,10 +214,10 @@ function App() {
           </div>
 
           {/* 回到顶部按钮 */}
-          {showScrollTop && (
+          {showRightScrollTop && (
             <button
-              onClick={scrollToTop}
-              className="absolute bottom-10 right-10 w-10 h-10 bg-white border border-min-border rounded-full shadow-lg flex items-center justify-center text-min-secondary hover:text-min-accent hover:border-min-accent transition-all z-30 animate-fade-in-up"
+              onClick={() => scrollToTop(rightScrollRef)}
+              className="absolute bottom-6 right-6 w-10 h-10 bg-white border border-min-border rounded-full shadow-lg flex items-center justify-center text-min-secondary hover:text-min-accent hover:border-min-accent transition-all z-20 animate-fade-in-up"
               title="回到顶部"
             >
               <ArrowUp size={20} />
@@ -218,25 +227,14 @@ function App() {
       </main>
 
       {/* 底部状态栏 */}
-      <footer className="px-8 py-3 bg-white border-t border-min-border flex items-center justify-between text-[11px] text-min-secondary font-medium">
+      <footer className="px-8 py-3 bg-white border-t border-min-border flex items-center justify-between text-[11px] text-min-secondary font-medium shrink-0">
         <div className="flex items-center gap-6">
-          <span className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-            大小: {parsedData ? `${JSON.stringify(parsedData).length} 字节` : '---'}
-          </span>
-          <span className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
-            字符总数: {input.length}
-          </span>
+          <span>大小: {parsedData ? `${JSON.stringify(parsedData).length} 字节` : '---'}</span>
+          <span>字符总数: {input.length}</span>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] tracking-widest uppercase opacity-60">Status:</span>
-          <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full shadow-sm ${error ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
-            <span className={`uppercase tracking-widest font-bold ${error ? 'text-red-500' : 'text-green-600'}`}>
-              {error ? 'Invalid' : 'Success'}
-            </span>
-          </div>
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${error ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+          <span className="uppercase tracking-widest">{error ? 'Invalid' : 'Success'}</span>
         </div>
       </footer>
     </div>
